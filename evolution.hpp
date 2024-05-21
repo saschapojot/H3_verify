@@ -57,6 +57,7 @@ public:
         for(int n1=static_cast<int>(N1/2);n1<N1;n1++){
             k1ValsAll.push_back(2*PI*static_cast<double >(n1-N1)/(2.0*L1));
         }
+//        std::cout<<"len(k1ValsAll)="<<k1ValsAll.size()<<std::endl;
 
         for(const auto&val: k1ValsAll){
             k1ValsAllSquared.push_back(std::pow(val,2));
@@ -68,6 +69,8 @@ public:
         for(int n2=static_cast<int >(N2/2);n2<N2;n2++){
             k2ValsAll.push_back(2*PI*static_cast<double >(n2-N2)/(2.0*L2));
         }
+//        std::cout<<"len(k2ValsAll)="<<k2ValsAll.size()<<std::endl;
+
         for(const auto &val:k2ValsAll){
             k2ValsAllSquared.push_back(std::pow(val,2));
         }
@@ -212,11 +215,11 @@ public:
     double e2r=0;
 
     //params for 7
-    int N1=150;
-    int N2=800;
+    int N1=1;
+    int N2=500;
 
-    double L1=0.5;
-    double L2=5;
+    double L1=0;
+    double L2=0;
 
       //params for 5
 //    double L1=2;
@@ -230,12 +233,12 @@ public:
 
     double dx2=0;
 
-    double dtEst=0.00005;
+    double dtEst=0.000025;
     double tFlushStart=0;
     double tFlushStop=0.001;
     double tTotPerFlush=tFlushStop-tFlushStart;
 
-    int flushNum=100;
+    int flushNum=3000;
 
     int stepsPerFlush=static_cast<int>(std::ceil(tTotPerFlush/dtEst));
     double dt=tTotPerFlush/static_cast<double >(stepsPerFlush);

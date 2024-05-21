@@ -101,11 +101,27 @@ void os_DCE_Evolution::parseCSV(const int &group, const int &row){
 //    }
 //for inParamsNew6, N1=6000
 //for inParamsNew7, N1=9000
-
+    double  height=std::exp(-0.25)*1.1;
+    L1=1.1*std::pow(-2.0*std::log(height)/omegac,0.5);
+    std::cout<<"L1="<<L1<<std::endl;
     std::cout<<"N1="<<N1<<std::endl;
+    L2=(-g0*omegac*std::sqrt(2.0/omegam)*std::pow(L1,2)+0.5*g0*std::sqrt(2.0/omegam))*PI;
+
     dx1=2*L1/(static_cast<double>(N1));
     dx2=2*L2/(static_cast<double >(N2));
 //    std::cout<<"dt="<<dt<<std::endl;
+std::cout<<(std::pow(L1,2)<1/(2.0*omegac))<<std::endl;
+std::cout<<"dx1="<<dx1<<std::endl;
+std::cout<<"dx2="<<dx2<<std::endl;
+double tmp=std::pow(2.0/omegam,0.5);
+double maxPhase=L2/(-g0*omegac*tmp*std::pow(L1,2)+0.5*g0*tmp);
+double minDenom=-g0*omegac*tmp*std::pow(L1,2)+0.5*g0*tmp;
+double maxDenom=0.5*g0*tmp;
+std::cout<<"maxPhase="<<maxPhase<<std::endl;
+std::cout<<"minDenom="<<minDenom<<std::endl;
+std::cout<<"maxDenom="<<maxDenom<<std::endl;
+
+
 }
 
 ///
@@ -170,30 +186,30 @@ double os_DCE_Evolution::f2(int n2){
 
 
 ///initialize wavefunction serially
-void os_DCE_Evolution::initPsiSerial(){
+void os_DCE_Evolution::initPsiSerial() {
 
-    this->psi0=arma::ones<arma::cx_dmat>(N1,N2);
+    this->psi0 = arma::ones<arma::cx_dmat>(N1, N2);
 //    std::cout<<"finish init"<<std::endl;
 
 
 
 
 
-    this->psiSpace=arma::ones<arma::cx_dmat>(N1,N2);
+    this->psiSpace = arma::ones<arma::cx_dmat>(N1, N2);
 
-    for(int n1=0;n1<N1;n1++){
-        for(int n2=0;n2<N2;n2++){
-            double x1SquaredTmp=x1ValsAllSquared[n1];
-            double x2Tmp=x2ValsAll[n2];
-            std::complex<double>  gTmp=std::exp(1i*x2Tmp/(-g0*omegac*std::sqrt(2.0/omegam)*x1SquaredTmp
-                    +0.5*g0*std::sqrt(2.0/omegam)));
-            psi0(n1,n2)=gTmp;
-            psiSpace(n1,n2)=gTmp;
+    for (int n1 = 0; n1 < N1; n1++) {
+        for (int n2 = 0; n2 < N2; n2++) {
+            double x1SquaredTmp = x1ValsAllSquared[n1];
+            double x2Tmp = x2ValsAll[n2];
+            std::complex<double> gTmp = std::exp(1i * x2Tmp / (-g0 * omegac * std::sqrt(2.0 / omegam) * x1SquaredTmp
+                                                               + 0.5 * g0 * std::sqrt(2.0 / omegam)));
+            psi0(n1, n2) = gTmp;
+            psiSpace(n1, n2) = gTmp;
         }
     }
 
-psi0/=arma::norm(psi0,2);
-    psiSpace/=arma::norm(psiSpace,2);
+    psi0 /= arma::norm(psi0, 2);
+    psiSpace /= arma::norm(psiSpace, 2);
 }
 
 
@@ -504,10 +520,12 @@ double os_DCE_Evolution::funcg(int n2) {
 /// @return analytical solution for g0=0
 arma::cx_dmat  os_DCE_Evolution::psit(const int &j){
 
-    double tjminus1=timeValsAll[j-1];
-    double tj=tjminus1+dt;
+   double tj=0;
     if (j==0){
         tj=0;
+    } else{
+        double tjminus1=timeValsAll[j-1];
+        tj=tjminus1+dt;
     }
     arma::cx_dmat psiTmp=psiSpace;
     psiTmp*=std::exp(-1i/omegap*(std::cos(omegap*tj)-1));

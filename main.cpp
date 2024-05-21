@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
 
 
 
-    evo.popolateMatrices();
+//    evo.popolateMatrices();
     evo.evolution();
 
 //    arma::mat A(3,3);
